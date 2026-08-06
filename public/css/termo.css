@@ -1,0 +1,132 @@
+.container-termo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+
+#titulo {
+    font-weight: bold;
+    margin-bottom: 1px;
+    margin-top: 1px;
+    text-align: center;
+}
+
+#status-jogo {
+    min-height: 24px;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+/* ===== Grade ===== */
+#grade-termo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.linha-termo {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.celula-termo {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 6px;
+    background-color: #2e2a28;
+    border: 2px solid #3a3535;
+    color: #f0f0f0;
+    transition: transform 0.15s;
+}
+
+.celula-termo.preenchida {
+    border-color: #8a7a7a;
+}
+
+.celula-termo.virando {
+    transform: scaleY(0);
+}
+
+.celula-termo.verde {
+    background-color: #538d6e;
+    border-color: #538d6e;
+}
+
+.celula-termo.amarelo {
+    background-color: #b59f3b;
+    border-color: #b59f3b;
+}
+
+.celula-termo.cinza {
+    background-color: #3a3535;
+    border-color: #3a3535;
+}
+
+/* ===== Teclado ===== */
+#teclado {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 520px;
+}
+
+.linha-teclado {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+
+}
+
+.tecla {
+    min-width: 36px;
+    height: 48px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #565252;
+    color: #f0f0f0;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.tecla:active {
+    transform: scale(0.93);
+}
+
+.tecla-larga {
+    min-width: 64px;
+    font-size: 12px;
+}
+
+.tecla.verde {
+    background-color: #538d6e;
+}
+
+.tecla.amarelo {
+    background-color: #b59f3b;
+}
+
+.tecla.cinza {
+    background-color: #2e2a28;
+    color: #888;
+}
+
+#tabuleiros {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 28px;
+}

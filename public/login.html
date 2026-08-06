@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar | Jogos Diários</title>
+
+    <!-- CSS geral do site -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- CSS específico da página de login -->
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>🎮 <strong>Jogos Diários</strong></h1>
+    </header>
+
+    <main>
+        <div class="container-login">
+
+            <h1>Entrar / Criar Conta</h1>
+
+            <form id="form-cadastro">
+                <h2>Criar Conta</h2>
+
+                <input type="text" id="cad-nome" placeholder="Nome" required>
+
+                <input type="text" id="cad-nick" placeholder="Nick" required>
+
+                <input type="password" id="cad-senha" placeholder="Senha" required>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+
+            <form id="form-login">
+                <h2>Login</h2>
+
+                <input type="text" id="log-nick" placeholder="Nick" required>
+
+                <input type="password" id="log-senha" placeholder="Senha" required>
+
+                <button type="submit">Entrar</button>
+            </form>
+
+            <p id="mensagem"></p>
+
+        </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+
+</body>
+
+</html>

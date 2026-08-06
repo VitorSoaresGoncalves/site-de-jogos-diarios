@@ -1,0 +1,48 @@
+.galeria-jogos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 8px 0;
+}
+
+.card-jogo {
+    background-color: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #f0f0f0;
+    transition: transform 0.15s, border-color 0.15s;
+}
+
+.card-jogo:hover {
+    transform: translateY(-4px);
+    border-color: #2cca91;
+}
+
+.card-jogo.desabilitado {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.icone-jogo {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.card-jogo h2 {
+    margin: 0 0 8px;
+    background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+.card-jogo p {
+    font-size: 14px;
+    color: #aaa;
+    margin: 0;
+}

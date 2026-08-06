@@ -1,0 +1,108 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #f0f0f0;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    background-color: #1e1e1e;
+}
+
+header h1 strong {
+    background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 32px;
+    background-color: #1a1a1a;
+}
+
+.nav-esquerda, .nav-direita {
+    display: flex;
+    gap: 16px;
+}
+
+nav a {
+    color: #f0f0f0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #4caf50;
+}
+
+main {
+    padding: 32px;
+}
+
+
+/* ===== Área do usuário (nav) ===== */
+
+#area-usuario {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+#area-usuario .saudacao {
+    font-weight: 600;
+    font-size: 16px;
+    background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* From Uiverse.io by JkHuger */
+.rainbow-hover {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff7576;
+    background-color: #363d57;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 9px 20px;
+    position: relative;
+    line-height: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 1px 2px #2B3044,
+        0px 3px 12px #2B3044;
+    transform-style: preserve-3d;
+    transform: scale(var(--s, 1)) perspective(600px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    perspective: 600px;
+    transition: transform 0.1s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.rainbow-hover .sp {
+    background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    display: block;
+}
+
+.rainbow-hover:active {
+    transition: 0.3s;
+    transform: scale(0.93);
+}

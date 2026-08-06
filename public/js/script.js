@@ -1,0 +1,1 @@
+document.getElementById('mensagem').textContent = 'JavaScript conectado com sucesso!';

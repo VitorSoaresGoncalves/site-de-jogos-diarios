@@ -1,0 +1,152 @@
+/* ===== Login / Cadastro ===== */
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 140px);
+    padding: 40px 20px;
+}
+
+main > div,
+.container-login {
+    width: 100%;
+    max-width: 950px;
+}
+
+main h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+main h1::after {
+    content: "";
+    display: block;
+    width: 120px;
+    height: 4px;
+    margin: 12px auto 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91);
+}
+
+#form-cadastro,
+#form-login {
+    background: #1e1e1e;
+    border: 1px solid #2d2d2d;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+}
+
+#form-cadastro {
+    margin-bottom: 30px;
+}
+
+#form-cadastro h2,
+#form-login h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    text-align: center;
+    background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#form-cadastro input,
+#form-login input {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    border: 1px solid #3a3a3a;
+    border-radius: 10px;
+    background: #2a2a2a;
+    color: #f0f0f0;
+    font-size: 15px;
+    transition: .2s;
+}
+
+#form-cadastro input::placeholder,
+#form-login input::placeholder {
+    color: #a5a5a5;
+}
+
+#form-cadastro input:focus,
+#form-login input:focus {
+    outline: none;
+    border-color: #866ee7;
+    box-shadow: 0 0 12px rgba(134, 110, 231, .35);
+}
+
+#form-cadastro button,
+#form-login button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91);
+    transition: .25s;
+}
+
+#form-cadastro button:hover,
+#form-login button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(134, 110, 231, .35);
+}
+
+#form-cadastro button:active,
+#form-login button:active {
+    transform: scale(.97);
+}
+
+#mensagem {
+    margin-top: 25px;
+    text-align: center;
+    font-weight: bold;
+    color: #2cca91;
+}
+
+/* Desktop */
+@media (min-width: 800px) {
+
+    main > div,
+    .container-login {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    main h1 {
+        grid-column: 1 / -1;
+    }
+
+    #mensagem {
+        grid-column: 1 / -1;
+    }
+
+    #form-cadastro {
+        margin-bottom: 0;
+    }
+}
+
+/* Mobile */
+@media (max-width: 799px) {
+    main {
+        padding: 25px 15px;
+    }
+
+    #form-cadastro,
+    #form-login {
+        padding: 24px;
+    }
+
+    main h1 {
+        font-size: 1.7rem;
+    }
+}
