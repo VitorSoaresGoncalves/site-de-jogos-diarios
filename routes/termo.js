@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { avaliarPalpite, palavrasDoDia, palavrasAleatoriasUnicas } = require('../games/termo');
+const { avaliarPalpite, palavrasDoDia, palavrasAleatoriasUnicas, palavraExiste } = require('../games/termo');
 
 const CONFIG = {
     termo:    { qtd: 1, tentativasMax: 6 },
@@ -39,6 +39,10 @@ function processarPalpite(req, res, chave) {
         return res.status(400).json({ error: `A palavra deve ter ${jogo.boards[0].palavraSecreta.length} letras.` });
     }
 
+    if (!palavraExiste(palpite)) {
+        return res.status(400).json({ error: 'Palavra não está na lista.', tipo: 'palavra_invalida' });
+    }
+
     jogo.tentativasUsadas++;
 
     const boardsResposta = jogo.boards.map(board => {
@@ -69,19 +73,21 @@ function processarPalpite(req, res, chave) {
     });
 }
 
-// ===== DIÁRIO: termo, dueto, quarteto =====
+// ===== Gera as rotas de DIÁRIO e TREINO para termo, dueto e quarteto =====
 ['termo', 'dueto', 'quarteto'].forEach(tipo => {
     const config = CONFIG[tipo];
-    const chave = `termo_${tipo}_diario`;
+
+    // --- Diário (palavra do dia, igual pra todo mundo) ---
+    const chaveDiario = `termo_${tipo}_diario`;
 
     router.post(`/${tipo}/diario/novo`, (req, res) => {
         const { palavras, data } = palavrasDoDia(config.qtd, tipo);
 
-        if (req.session[chave] && req.session[chave].data === data) {
-            return res.json(montarRespostaInicio(req.session[chave]));
+        if (req.session[chaveDiario] && req.session[chaveDiario].data === data) {
+            return res.json(montarRespostaInicio(req.session[chaveDiario]));
         }
 
-        req.session[chave] = {
+        req.session[chaveDiario] = {
             data,
             boards: criarBoards(palavras),
             tentativasUsadas: 0,
@@ -90,25 +96,26 @@ function processarPalpite(req, res, chave) {
             iniciadoEm: Date.now()
         };
 
-        res.json(montarRespostaInicio(req.session[chave]));
+        res.json(montarRespostaInicio(req.session[chaveDiario]));
     });
 
-    router.post(`/${tipo}/diario/palpite`, (req, res) => processarPalpite(req, res, chave));
-});
+    router.post(`/${tipo}/diario/palpite`, (req, res) => processarPalpite(req, res, chaveDiario));
 
-// ===== TREINO: só termo clássico por enquanto =====
-router.post('/termo/treino/novo', (req, res) => {
-    const config = CONFIG.termo;
-    req.session.termo_termo_treino = {
-        boards: criarBoards(palavrasAleatoriasUnicas(config.qtd)),
-        tentativasUsadas: 0,
-        tentativasMax: config.tentativasMax,
-        finalizado: false,
-        iniciadoEm: Date.now()
-    };
-    res.json(montarRespostaInicio(req.session.termo_termo_treino));
-});
+    // --- Treino (palavras aleatórias, sempre novo jogo) ---
+    const chaveTreino = `termo_${tipo}_treino`;
 
-router.post('/termo/treino/palpite', (req, res) => processarPalpite(req, res, 'termo_termo_treino'));
+    router.post(`/${tipo}/treino/novo`, (req, res) => {
+        req.session[chaveTreino] = {
+            boards: criarBoards(palavrasAleatoriasUnicas(config.qtd)),
+            tentativasUsadas: 0,
+            tentativasMax: config.tentativasMax,
+            finalizado: false,
+            iniciadoEm: Date.now()
+        };
+        res.json(montarRespostaInicio(req.session[chaveTreino]));
+    });
+
+    router.post(`/${tipo}/treino/palpite`, (req, res) => processarPalpite(req, res, chaveTreino));
+});
 
 module.exports = router;

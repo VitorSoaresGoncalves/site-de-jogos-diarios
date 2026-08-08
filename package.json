@@ -1,0 +1,21 @@
+{
+  "name": "site-jogos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "express-socket.io-session": "^1.3.5",
+    "socket.io": "^4.8.3"
+  }
+}

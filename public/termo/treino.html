@@ -15,12 +15,11 @@
             <a href="/index.html">← Todos os jogos</a>
             <a href="/termo/diario.html">Diário</a>
             <a href="/termo/treino.html">Treino</a>
-            <a href="/termo/customizado.html">Customizado</a>
             <a href="/termo/leaderboard.html">Leaderboard</a>
         </div>
         <div class="nav-direita">
-            <a href="/termo/dueto.html">Dueto</a>
-            <a href="/termo/quarteto.html">Quarteto</a>
+            <a href="/termo/dueto-treino.html">Dueto</a>
+            <a href="/termo/quarteto-treino.html">Quarteto</a>
         </div>
     </nav>
 
@@ -39,8 +38,10 @@
     const MODO_JOGO = 'treino';
     const PROXIMO_JOGO = { texto: 'Jogar novamente', acao: () => window.location.reload() };
     </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/conexao-jogadores.js"></script>
     <script src="../js/sessao.js"></script>
-    <script src="../js/modal-resultado.js"></script>
-    <script src="../js/termo-jogo.js"></script>
+    <script src="../js/termo/modal-resultado.js"></script>
+    <script src="../js/termo/termo-jogo.js"></script>
 </body>
 </html>

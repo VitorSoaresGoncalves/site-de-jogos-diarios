@@ -15,7 +15,6 @@
             <a href="/index.html">← Todos os jogos</a>
             <a href="/termo/diario.html">Diário</a>
             <a href="/termo/treino.html">Treino</a>
-            <a href="/termo/customizado.html">Customizado</a>
             <a href="/termo/leaderboard.html">Leaderboard</a>
         </div>
         <div class="nav-direita">
@@ -30,7 +29,7 @@
         <div class="container-termo">
             <h2 id="titulo">Jogo Termo - Quarteto</h2>
             <p id="status-jogo"></p>
-            <div id="tabuleiros"></div>
+            <div id="tabuleiros" style="zoom:0.69;"></div>
             <div id="teclado"></div>
         </div>
     </main>
@@ -40,8 +39,10 @@
     const MODO_JOGO = 'diario';
     const PROXIMO_JOGO = { link: '/index.html', texto: 'Voltar ao início' };
     </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/conexao-jogadores.js"></script>
     <script src="../js/sessao.js"></script>
-    <script src="../js/modal-resultado.js"></script>
-    <script src="../js/termo-jogo.js"></script>
+    <script src="../js/termo/modal-resultado.js"></script>
+    <script src="../js/termo/termo-jogo.js"></script>
 </body>
 </html>

@@ -1,31 +1,45 @@
+const http = require('http');
+const { Server } = require('socket.io');
+const sharedSession = require('express-socket.io-session');
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+
 const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const termoRoutes = require('./routes/termo');
+const conexoRoutes = require('./routes/conexo');
+const { registrarEventosSocket } = require('./sockets/conexaoJogadores');
 
 const app = express();
+const servidorHttp = http.createServer(app);
+const io = new Server(servidorHttp);
 const PORT = 3000;
+
+const configuracaoSessao = session({
+    secret: 'troque-essa-chave-depois',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000
+    }
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(configuracaoSessao);
 
-app.use(
-    session({
-        secret: 'troque-essa-chave-depois',
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            maxAge: 24 * 60 * 60 * 1000
-        }
-    })
-);
+io.use(sharedSession(configuracaoSessao, { autoSave: true }));
 
-// ⬇️ as rotas só podem vir DEPOIS da sessão
+io.on('connection', (socket) => {
+    
+    registrarEventosSocket(io, socket);
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/termo', termoRoutes);
+app.use('/api/conexo', conexoRoutes);
 
-app.listen(PORT, () => {
+servidorHttp.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

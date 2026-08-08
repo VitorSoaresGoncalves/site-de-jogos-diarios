@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogando Conexo Customizado</title>
+    <link rel="icon" href="../favicon.ico?v=2">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/conexo.css">
+    <link rel="stylesheet" href="../css/modal.css">
+</head>
+<body>
+
+    <header>
+        <h1>🧩 Conexo Customizado</h1>
+        <div id="area-usuario"></div>
+    </header>
+
+    <nav>
+        <div class="nav-esquerda">
+            <a href="/conexo/customizado.html">← Voltar aos jogos</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container-conexo">
+            <p id="status-conexo"></p>
+            <div id="vidas-conexo" class="vidas-conexo"></div>
+            <div id="grupos-resolvidos"></div>
+            <div id="grade-conexo"></div>
+            <div class="acoes-conexo">
+                <button id="btn-embaralhar" class="rainbow-hover"><span class="sp">Embaralhar</span></button>
+                <button id="btn-deselecionar" class="rainbow-hover"><span class="sp">Desmarcar</span></button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const idJogo = new URLSearchParams(window.location.search).get('id');
+        const API_BASE = `/api/conexo/customizado/${idJogo}`;
+        const PROXIMO_JOGO = { link: '/conexo/customizado.html', texto: 'Ver outros jogos' };
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/conexao-jogadores.js"></script>
+    <script src="../js/sessao.js"></script>
+    <script src="../js/modal-resultado.js"></script>
+    <script src="../js/conexo-jogo.js"></script>
+</body>
+</html>

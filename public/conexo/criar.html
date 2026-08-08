@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Conexo</title>
+    <link rel="icon" href="../favicon.ico?v=2">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/customizado.css">
+</head>
+<body>
+
+    <header>
+        <h1>🧩 Criar Conexo</h1>
+        <div id="area-usuario"></div>
+    </header>
+
+    <nav>
+        <div class="nav-esquerda">
+            <a href="/conexo/customizado.html">← Voltar</a>
+        </div>
+    </nav>
+
+    <main>
+        <form id="form-criar-conexo">
+            <div class="campo">
+                <label for="titulo">Título do jogo</label>
+                <input type="text" id="titulo" placeholder="">
+            </div>
+
+            <div class="campo">
+                <label for="tamanho">Número de quartetos</label>
+                <select id="tamanho">
+                    <option value="4">4 quartetos</option>
+                    <option value="5">5 quartetos</option>
+                    <option value="6">6 quartetos</option>
+                    <option value="7">7 quartetos</option>
+                    <option value="8">8 quartetos</option>
+                    <option value="9">9 quartetos</option>
+                </select>
+            </div>
+
+            <div class="campo campo-switch">
+                <label for="switch-privado">Visibilidade</label>
+                <div class="switch-container">
+                    <span class="switch-label">Público</span>
+                    <label class="switch">
+                        <input type="checkbox" id="switch-privado">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="switch-label">Privado</span>
+                </div>
+            </div>
+
+            <div id="blocos-quartetos"></div>
+
+            <p id="erro-criacao" style="color:#ff7576;"></p>
+
+            <button type="submit" class="rainbow-hover"><span class="sp">Salvar jogo</span></button>
+        </form>
+    </main>
+
+    <script src="../js/sessao.js"></script>
+    <script>
+        const selectTamanho = document.getElementById('tamanho');
+        const blocosContainer = document.getElementById('blocos-quartetos');
+        const form = document.getElementById('form-criar-conexo');
+        const erroEl = document.getElementById('erro-criacao');
+
+function montarBlocos(qtd) {
+    blocosContainer.innerHTML = '';
+
+    const sugestoes = [
+        "Ex: Deuses romanos",
+        "Ex: Tipos de frutas",
+        "Ex: Personagens de filmes",
+        "Ex: Objetos encontrados em uma cozinha",
+        "Ex: Animais marinhos",
+        "Ex: Profissões",
+        "Ex: Cores",
+        "Ex: Países",
+        "Ex: Cartas de baralho"
+    ];
+
+    for (let i = 0; i < qtd; i++) {
+        const bloco = document.createElement('div');
+        bloco.classList.add('bloco-quarteto');
+
+        bloco.innerHTML = `
+            <h4>Quarteto ${i + 1}</h4>
+
+            <div class="campo">
+                <label>Relação entre as palavras</label>
+                <input 
+                    type="text" 
+                    class="input-relacao" 
+                    placeholder="${sugestoes[i] || 'Digite uma relação'}" 
+                    required
+                >
+            </div>
+
+            <div class="linha-palavras">
+                <input type="text" class="input-palavra" placeholder="Palavra 1" required>
+                <input type="text" class="input-palavra" placeholder="Palavra 2" required>
+                <input type="text" class="input-palavra" placeholder="Palavra 3" required>
+                <input type="text" class="input-palavra" placeholder="Palavra 4" required>
+            </div>
+        `;
+
+        blocosContainer.appendChild(bloco);
+    }
+}
+
+        selectTamanho.addEventListener('change', () => montarBlocos(Number(selectTamanho.value)));
+        montarBlocos(Number(selectTamanho.value)); // gera os 4 iniciais ao carregar
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            erroEl.textContent = '';
+
+            const blocos = blocosContainer.querySelectorAll('.bloco-quarteto');
+            const grupos = Array.from(blocos).map(bloco => ({
+                relacao: bloco.querySelector('.input-relacao').value,
+                palavras: Array.from(bloco.querySelectorAll('.input-palavra')).map(inp => inp.value)
+            }));
+
+            try {
+                const resposta = await fetch('/api/conexo/customizado/criar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        titulo: document.getElementById('titulo').value,
+                        privado: document.getElementById('switch-privado').checked,
+                        grupos
+                    })
+                });
+
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    erroEl.textContent = dados.error;
+                    return;
+                }
+
+                window.location.href = `/conexo/jogar.html?id=${dados.id}`;
+
+            } catch (error) {
+                erroEl.textContent = 'Erro de conexão com o servidor.';
+            }
+        });
+    </script>
+</body>
+</html>

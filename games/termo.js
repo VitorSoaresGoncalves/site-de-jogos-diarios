@@ -1,10 +1,20 @@
 const fs = require('fs');
 const path = require('path');
 
+// Carregado UMA VEZ, quando o servidor inicia — não a cada requisição
+const PALAVRAS = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '../data/palavras-termo.json'), 'utf-8')
+).map(p => p.toUpperCase());
+
+// Set para checagem rápida de existência (O(1) em vez de percorrer o array inteiro)
+const PALAVRAS_VALIDAS = new Set(PALAVRAS);
+
 function carregarPalavras() {
-    return JSON.parse(
-        fs.readFileSync(path.join(__dirname, '../data/palavras-termo.json'), 'utf-8')
-    );
+    return PALAVRAS;
+}
+
+function palavraExiste(palavra) {
+    return PALAVRAS_VALIDAS.has(palavra.toUpperCase());
 }
 
 function dataDeHojeBrasilia() {
@@ -84,4 +94,4 @@ function palavrasAleatoriasUnicas(qtd) {
     return selecionadas;
 }
 
-module.exports = { avaliarPalpite, palavrasDoDia, palavrasAleatoriasUnicas };
+module.exports = { avaliarPalpite, palavrasDoDia, palavrasAleatoriasUnicas, palavraExiste };

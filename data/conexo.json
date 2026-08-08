@@ -1,0 +1,52 @@
+[
+    {
+        "id": "conexo-001",
+        "grupos": [
+            {
+                "relacao": "Voto de ___",
+                "cor": "amarelo",
+                "palavras": ["CABRESTO", "CASTIDADE", "MINERVA", "CONFIANÇA"]
+            },
+            {
+                "relacao": "Deuses romanos",
+                "cor": "verde",
+                "palavras": ["VÊNUS", "BACO", "CUPIDO", "FORTUNA"]
+            },
+            {
+                "relacao": "Molhos",
+                "cor": "azul",
+                "palavras": ["MADEIRA", "TÁRTARO", "BECHAMEL", "ROTI"]
+            },
+            {
+                "relacao": "Sinônimos de certeza",
+                "cor": "roxo",
+                "palavras": ["FIRMEZA", "CONVICÇÃO", "SEGURANÇA", "CONVENCIMENTO"]
+            }
+        ]
+    },
+    {
+        "id": "conexo-002",
+        "grupos": [
+            {
+                "relacao": "Tipos de café",
+                "cor": "amarelo",
+                "palavras": ["EXPRESSO", "CORTADO", "COADO", "PINGADO"]
+            },
+            {
+                "relacao": "Peças de xadrez",
+                "cor": "verde",
+                "palavras": ["TORRE", "CAVALO", "BISPO", "REI"]
+            },
+            {
+                "relacao": "Rios brasileiros",
+                "cor": "azul",
+                "palavras": ["AMAZONAS", "TOCANTINS", "PARANÁ", "XINGU"]
+            },
+            {
+                "relacao": "Sentidos figurados de 'quebrar'",
+                "cor": "roxo",
+                "palavras": ["FALIR", "TREINAR", "ENTORTAR", "SUPERAR"]
+            }
+        ]
+    }
+]

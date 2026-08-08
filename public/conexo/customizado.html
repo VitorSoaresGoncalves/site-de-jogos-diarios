@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Conexo Customizado</title>
+    <link rel="icon" href="../favicon.ico?v=2">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/customizado.css">
+</head>
+<body>
+
+    <header>
+        <h1>🧩 Conexo</h1>
+        <div id="area-usuario"></div>
+    </header>
+
+    <nav>
+        <div class="nav-esquerda">
+            <a href="/index.html">← Todos os jogos</a>
+            <a href="/conexo/diario.html">Diário</a>
+            <a href="/conexo/treino.html">Treino</a>
+            <a href="/conexo/customizado.html">Customizado</a>
+            <a href="/conexo/leaderboard.html">Leaderboard</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="topo-customizado">
+            <h2>Jogos Customizados</h2>
+            <a href="/conexo/criar.html" class="rainbow-hover"><span class="sp">+ Criar novo jogo</span></a>
+        </div>
+        <div class="busca-customizado">
+            <input type="text" id="input-busca" placeholder="Buscar por título ou autor...">
+        </div>
+
+        <div id="lista-customizados" class="lista-customizados"></div>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/conexao-jogadores.js"></script>
+    <script src="../js/sessao.js"></script>
+    <script>
+        let meuId = null;
+
+        async function carregarUsuarioAtual() {
+            try {
+                const resposta = await fetch('/api/auth/me');
+                if (resposta.ok) {
+                    const dados = await resposta.json();
+                    meuId = dados.id;
+                }
+            } catch (error) {
+                meuId = null;
+            }
+        }
+
+        async function carregarLista(termoBusca = '') {
+            const container = document.getElementById('lista-customizados');
+            const url = termoBusca
+                ? `/api/conexo/customizado/listar?busca=${encodeURIComponent(termoBusca)}`
+                : '/api/conexo/customizado/listar';
+
+            const resposta = await fetch(url);
+            const jogos = await resposta.json();
+
+            if (jogos.length === 0) {
+                container.innerHTML = '<p>Nenhum jogo encontrado.</p>';
+                return;
+            }
+
+            container.innerHTML = jogos.map(jogo => `
+                <div class="card-customizado-wrapper">
+                    <a href="/conexo/jogar.html?id=${jogo.id}" class="card-customizado">
+                        ${jogo.privado ? '<span class="badge-privado">🔒 Privado</span>' : '<span class="badge-publico">🔓 Público</span>'}
+                        <h3>${jogo.titulo}</h3>
+                        <p>Por ${jogo.criador_nome || 'Anônimo'} · ${jogo.tamanho} quartetos</p>
+                    </a>
+                    ${jogo.criador_id === meuId
+                        ? `<button class="btn-excluir" data-id="${jogo.id}" title="Excluir jogo">&times;</button>`
+                        : ''
+                    }
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.btn-excluir').forEach(btn => {
+                btn.addEventListener('click', (e) => excluirJogo(e.currentTarget.dataset.id));
+            });
+        }
+
+        let timeoutBusca;
+        document.getElementById('input-busca').addEventListener('input', (e) => {
+            clearTimeout(timeoutBusca);
+            timeoutBusca = setTimeout(() => carregarLista(e.target.value), 300);
+        });
+
+        async function excluirJogo(id) {
+            const confirmar = confirm('Tem certeza que deseja excluir este jogo? Essa ação não pode ser desfeita.');
+            if (!confirmar) return;
+
+            try {
+                const resposta = await fetch(`/api/conexo/customizado/${id}`, { method: 'DELETE' });
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    alert(dados.error);
+                    return;
+                }
+
+                carregarLista();
+            } catch (error) {
+                alert('Erro de conexão com o servidor.');
+            }
+        }
+
+        (async () => {
+            await carregarUsuarioAtual();
+            await carregarLista();
+        })();
+    </script>
+</body>
+</html>

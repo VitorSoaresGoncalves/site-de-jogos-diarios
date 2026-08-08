@@ -8,6 +8,13 @@ async function carregarAreaUsuario() {
         if (resposta.ok) {
             const dados = await resposta.json();
 
+            window.usuarioAtualId = dados.id;
+
+            if (typeof iniciarConexaoJogadores === 'function') {
+                iniciarConexaoJogadores();
+                montarPainelConexao();
+            }
+
             area.innerHTML = `
                 <span class="saudacao">Olá, ${dados.nick}</span>
                 <button id="btn-logout" class="rainbow-hover">
