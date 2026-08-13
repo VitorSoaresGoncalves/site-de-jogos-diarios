@@ -134,13 +134,13 @@ async function enviarPalpite() {
         if (dados.finalizado) {
             jogoFinalizado = true;
 
+            if (dados.vencido && typeof notificarVitoriaParceiro === 'function') {
+                notificarVitoriaParceiro(dados.tempoSegundos);
+            }
+
             if (!dados.vencido && dados.respostaCompleta) {
                 grupoResolvidosEl.innerHTML = '';
-
-                dados.respostaCompleta.forEach(grupo =>
-                    renderizarGrupoResolvido(grupo)
-                );
-
+                dados.respostaCompleta.forEach(grupo => renderizarGrupoResolvido(grupo));
                 gradeEl.innerHTML = '';
             }
 
@@ -186,5 +186,22 @@ async function iniciarJogo() {
         status.textContent = 'Encontre os grupos de 4 palavras relacionadas.';
     }
 }
+
+function pausarTempoJogo() {
+    if (jogoFinalizado) return;
+    navigator.sendBeacon(`${API_BASE}/pausar`);
+}
+
+function retomarTempoJogo() {
+    if (jogoFinalizado) return;
+    fetch(`${API_BASE}/retomar`, { method: 'POST' });
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pausarTempoJogo();
+    else retomarTempoJogo();
+});
+
+window.addEventListener('pagehide', pausarTempoJogo);
 
 iniciarJogo();

@@ -69,3 +69,80 @@
 @keyframes sairNotificacao {
     to { transform: translateX(30px); opacity: 0; }
 }
+
+.toast-sucesso {
+    border-left-color: #2cca91;
+}
+
+.notificacao-resultado {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    z-index: 150;
+    width: 280px;
+    animation: entrarNotificacaoCentro 0.25s ease;
+}
+
+.notificacao-resultado.saindo {
+    animation: sairNotificacaoCentro 0.2s ease forwards;
+}
+
+@keyframes entrarNotificacaoCentro {
+    from { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+    to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+@keyframes sairNotificacaoCentro {
+    to { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+}
+
+.notificacao-resultado .fechar-notificacao {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.notificacao-resultado .fechar-notificacao:hover {
+    color: #fff;
+}
+
+.icone-notificacao {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.notificacao-resultado h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    background: linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.jogo-notificacao {
+    margin: 0 0 4px;
+    font-size: 13px;
+    color: #ccc;
+}
+
+.tempo-notificacao {
+    margin: 0;
+    font-size: 13px;
+    color: #999;
+    font-weight: 600;
+}

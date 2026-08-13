@@ -25,6 +25,13 @@ header h1 strong {
     color: transparent;
 }
 
+.pagina-termo header {
+    visibility: hidden;
+    height: 1px;
+    min-height: 1px;
+    padding: 0 1px;
+}
+
 nav {
     display: flex;
     justify-content: space-between;
@@ -34,10 +41,9 @@ nav {
 
 }
 
-.nav-esquerda,
-.nav-direita {
+.nav-esquerda {
     display: flex;
-    gap: 16px;
+    gap: 14px;
 }
 
 nav a {
@@ -100,7 +106,7 @@ main {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
+
     display: block;
 }
 

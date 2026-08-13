@@ -32,6 +32,14 @@ function registrarEventosSocket(io, socket) {
     if (parceirosConectados.has(meuId)) {
         const parceiroId = parceirosConectados.get(meuId);
         socket.join(nomeDaSala(meuId, parceiroId));
+
+        const parceiro = buscarUsuarioPorId(parceiroId);
+        socket.emit('conexao:estabelecida', {
+            jogadores: [
+                { id: meuId, nick: meuNick },
+                { id: parceiroId, nick: parceiro?.nick }
+            ]
+        });
     }
 
     // ===== Convite =====
@@ -93,6 +101,32 @@ function registrarEventosSocket(io, socket) {
     // ===== Encerrar conexão =====
     socket.on('conexao:encerrar', () => {
         encerrarConexaoDe(io, meuId);
+    });
+
+    // ===== Notificar vitória pro parceiro =====
+    socket.on('jogo:completou', ({ jogoNome, tempoSegundos }) => {
+        const parceiroId = parceirosConectados.get(meuId);
+        if (!parceiroId) return;
+
+        const socketParceiroId = socketsPorUsuario.get(parceiroId);
+        if (socketParceiroId) {
+            io.to(socketParceiroId).emit('parceiro:completou', {
+                nick: meuNick,
+                jogoNome,
+                tempoSegundos
+            });
+        }
+    });
+
+    // ===== Avisar o parceiro ao entrar em uma página de jogo =====
+    socket.on('jogo:entrou', ({ rota }) => {
+        const parceiroId = parceirosConectados.get(meuId);
+        if (!parceiroId) return;
+
+        const socketParceiroId = socketsPorUsuario.get(parceiroId);
+        if (socketParceiroId) {
+            io.to(socketParceiroId).emit('jogo:parceiroEntrou', { rota, nick: meuNick });
+        }
     });
 
     socket.on('disconnect', () => {

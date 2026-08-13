@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { jogoDoDia, jogoAleatorio, paletaCores, jogoAPartirDeBase } = require('../games/conexo');
 const db = require('../database/db');
+const { parceirosConectados } = require('../sockets/conexaoJogadores');
 const exigirLogin = require('../middleware/auth');
+const { iniciarEstadoTempo, pausar, retomar, tempoDecorridoSegundos } = require('../games/tempoJogo');
 
 
 const MAX_ERROS = 4;
@@ -16,7 +18,7 @@ function criarSessaoJogo({ jogoBase, tabuleiro }) {
         maxErros: MAX_ERROS,
         finalizado: false,
         vencido: false,
-        iniciadoEm: Date.now()
+        ...iniciarEstadoTempo()
     };
 }
 
@@ -70,7 +72,7 @@ function processarPalpite(req, res, chave) {
         if (venceu) {
             jogo.finalizado = true;
             jogo.vencido = true;
-            jogo.tempoSegundos = Math.floor((Date.now() - jogo.iniciadoEm) / 1000);
+            jogo.tempoSegundos = tempoDecorridoSegundos(jogo);
         }
 
         return res.json({
@@ -93,7 +95,7 @@ function processarPalpite(req, res, chave) {
     if (jogo.erros >= jogo.maxErros) {
         jogo.finalizado = true;
         jogo.vencido = false;
-        jogo.tempoSegundos = Math.floor((Date.now() - jogo.iniciadoEm) / 1000);
+        jogo.tempoSegundos = tempoDecorridoSegundos(jogo);
     }
 
     res.json({
@@ -112,6 +114,7 @@ function processarPalpite(req, res, chave) {
 router.get('/customizado/listar', (req, res) => {
     const busca = (req.query.busca || '').trim();
     const meuId = req.session.usuarioId || null;
+    const parceiroId = meuId ? parceirosConectados.get(meuId) : null;
 
     let sql = `
         SELECT id, titulo, criador_id, criador_nome, tamanho, privado, criado_em
@@ -119,9 +122,10 @@ router.get('/customizado/listar', (req, res) => {
         WHERE (
             privado = 0
             OR criador_id = ?
+            OR criador_id = ?
         )
     `;
-    const params = [meuId];
+    const params = [meuId, parceiroId];
 
     if (busca) {
         sql += ` AND (titulo LIKE ? OR criador_nome LIKE ?)`;
@@ -201,7 +205,10 @@ router.post('/customizado/:id/novo', (req, res) => {
         return res.status(404).json({ error: 'Jogo não encontrado.' });
     }
 
-    if (registro.privado && registro.criador_id !== req.session.usuarioId) {
+    const meuId = req.session.usuarioId;
+    const souParceiro = parceirosConectados.get(meuId) === registro.criador_id;
+
+    if (registro.privado && registro.criador_id !== meuId && !souParceiro) {
         return res.status(403).json({ error: 'Este jogo é privado.' });
     }
 
@@ -238,5 +245,38 @@ router.post('/treino/novo', (req, res) => {
 });
 
 router.post('/treino/palpite', (req, res) => processarPalpite(req, res, 'conexo_treino'));
+
+router.post('/diario/pausar', (req, res) => {
+    const jogo = req.session.conexo_diario;
+    if (jogo && !jogo.finalizado) pausar(jogo);
+    res.json({ ok: true });
+});
+router.post('/diario/retomar', (req, res) => {
+    const jogo = req.session.conexo_diario;
+    if (jogo && !jogo.finalizado) retomar(jogo);
+    res.json({ ok: true });
+});
+
+router.post('/treino/pausar', (req, res) => {
+    const jogo = req.session.conexo_treino;
+    if (jogo && !jogo.finalizado) pausar(jogo);
+    res.json({ ok: true });
+});
+router.post('/treino/retomar', (req, res) => {
+    const jogo = req.session.conexo_treino;
+    if (jogo && !jogo.finalizado) retomar(jogo);
+    res.json({ ok: true });
+});
+
+router.post('/customizado/:id/pausar', (req, res) => {
+    const jogo = req.session[`conexo_custom_${req.params.id}`];
+    if (jogo && !jogo.finalizado) pausar(jogo);
+    res.json({ ok: true });
+});
+router.post('/customizado/:id/retomar', (req, res) => {
+    const jogo = req.session[`conexo_custom_${req.params.id}`];
+    if (jogo && !jogo.finalizado) retomar(jogo);
+    res.json({ ok: true });
+});
 
 module.exports = router;

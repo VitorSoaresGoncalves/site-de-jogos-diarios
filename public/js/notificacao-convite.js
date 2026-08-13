@@ -48,3 +48,29 @@ function mostrarToast(mensagem, tipo = 'info') {
         setTimeout(() => toast.remove(), 300);
     }, 4000);
 }
+
+function mostrarNotificacaoResultado({ nick, jogoNome, tempoSegundos }) {
+    criarContainerNotificacoes();
+    const container = document.getElementById('container-notificacoes');
+
+    const min = Math.floor(tempoSegundos / 60);
+    const seg = tempoSegundos % 60;
+    const tempoFormatado = `${min}:${seg.toString().padStart(2, '0')}`;
+
+    const card = document.createElement('div');
+    card.classList.add('notificacao-resultado');
+    card.innerHTML = `
+        <button class="fechar-notificacao">&times;</button>
+        <span class="icone-notificacao">🎉</span>
+        <h3>${nick} completou!</h3>
+        <p class="jogo-notificacao">${jogoNome}</p>
+        <p class="tempo-notificacao">⏱ ${tempoFormatado}</p>
+    `;
+
+    card.querySelector('.fechar-notificacao').addEventListener('click', () => {
+        card.classList.add('saindo');
+        setTimeout(() => card.remove(), 300);
+    });
+
+    document.body.appendChild(card);
+}

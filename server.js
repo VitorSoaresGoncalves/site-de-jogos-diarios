@@ -1,3 +1,4 @@
+require('dotenv').config();
 const http = require('http');
 const { Server } = require('socket.io');
 const sharedSession = require('express-socket.io-session');
@@ -14,14 +15,15 @@ const { registrarEventosSocket } = require('./sockets/conexaoJogadores');
 const app = express();
 const servidorHttp = http.createServer(app);
 const io = new Server(servidorHttp);
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const configuracaoSessao = session({
-    secret: 'troque-essa-chave-depois',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === 'production'
     }
 });
 

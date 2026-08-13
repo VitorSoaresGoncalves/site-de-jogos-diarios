@@ -213,6 +213,11 @@ function finalizarTurno(dados) {
 
     if (dados.finalizado) {
         jogoFinalizado = true;
+
+        if (dados.venceu && typeof notificarVitoriaParceiro === 'function') {
+            notificarVitoriaParceiro(dados.tempoSegundos);
+        }
+
         mostrarResultadoFinal(dados);
     } else {
         status.textContent = `Tentativa ${tentativaAtual + 1} de ${tentativasMax}`;
@@ -263,5 +268,24 @@ async function iniciarJogo() {
         status.textContent = `Tentativa ${tentativaAtual + 1} de ${tentativasMax}`;
     }
 }
+
+function pausarTempoJogo() {
+    if (jogoFinalizado) return;
+    const url = `/api/termo/${TIPO_JOGO}/${MODO_JOGO}/pausar`;
+    navigator.sendBeacon(url);
+}
+
+function retomarTempoJogo() {
+    if (jogoFinalizado) return;
+    fetch(`/api/termo/${TIPO_JOGO}/${MODO_JOGO}/retomar`, { method: 'POST' });
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pausarTempoJogo();
+    else retomarTempoJogo();
+});
+
+window.addEventListener('pagehide', pausarTempoJogo);
+
 
 iniciarJogo();

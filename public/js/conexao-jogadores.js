@@ -35,12 +35,41 @@ function iniciarConexaoJogadores() {
         const meuId = window.usuarioAtualId;
         parceiroAtual = jogadores.find(j => j.id !== meuId);
         atualizarPainelConectado();
+        notificarEntradaEmJogo();
     });
 
     socketConexao.on('conexao:encerrada', () => {
         parceiroAtual = null;
         atualizarPainelConectado();
     });
+
+    socketConexao.on('parceiro:completou', ({ nick, jogoNome, tempoSegundos }) => {
+        mostrarNotificacaoResultado({ nick, jogoNome, tempoSegundos });
+    });
+
+    socketConexao.on('jogo:parceiroEntrou', ({ rota, nick }) => {
+        const rotaAtual = window.location.pathname + window.location.search;
+        if (rotaAtual === rota) return; // já estou lá, não faz nada
+
+        mostrarToast(`${nick} entrou em um jogo. Te levando junto...`, 'info');
+
+        sessionStorage.setItem('navegacaoForcadaPeloParceiro', 'true');
+        setTimeout(() => {
+            window.location.href = rota;
+        }, 1200);
+    });
+}
+
+function formatarTempoNotificacao(segundos) {
+    const min = Math.floor(segundos / 60);
+    const seg = segundos % 60;
+    return `${min}:${seg.toString().padStart(2, '0')}`;
+}
+
+function notificarVitoriaParceiro(tempoSegundos) {
+    if (!socketConexao || !parceiroAtual) return;
+    const jogoNome = window.NOME_JOGO_EXIBICAO || 'um jogo';
+    socketConexao.emit('jogo:completou', { jogoNome, tempoSegundos });
 }
 
 function montarPainelConexao() {
@@ -87,4 +116,20 @@ function mostrarPopupConvite(deId, deNick) {
 
 function atualizarStatusConexao(mensagem, isErro = false) {
     mostrarToast(mensagem, isErro ? 'erro' : 'info');
+}
+
+function estaEmPaginaDeJogo() {
+    return window.EH_PAGINA_DE_JOGO === true;
+}
+
+function notificarEntradaEmJogo() {
+    if (!socketConexao || !parceiroAtual || !estaEmPaginaDeJogo()) return;
+
+    const foiNavegacaoForcada = sessionStorage.getItem('navegacaoForcadaPeloParceiro') === 'true';
+    sessionStorage.removeItem('navegacaoForcadaPeloParceiro');
+
+    if (foiNavegacaoForcada) return; // evita o "ping-pong" de navegação
+
+    const rota = window.location.pathname + window.location.search;
+    socketConexao.emit('jogo:entrou', { rota });
 }

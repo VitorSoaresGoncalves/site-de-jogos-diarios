@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/conexo.css">
     <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/notificacoes.css">
 </head>
 <body>
 
@@ -38,11 +39,13 @@
         const idJogo = new URLSearchParams(window.location.search).get('id');
         const API_BASE = `/api/conexo/customizado/${idJogo}`;
         const PROXIMO_JOGO = { link: '/conexo/customizado.html', texto: 'Ver outros jogos' };
+        window.NOME_JOGO_EXIBICAO = 'o Conexo Customizado';
     </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="../js/conexao-jogadores.js"></script>
     <script src="../js/sessao.js"></script>
     <script src="../js/modal-resultado.js"></script>
     <script src="../js/conexo-jogo.js"></script>
+    
 </body>
 </html>

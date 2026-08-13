@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { avaliarPalpite, palavrasDoDia, palavrasAleatoriasUnicas, palavraExiste } = require('../games/termo');
+const { iniciarEstadoTempo, pausar, retomar, tempoDecorridoSegundos } = require('../games/tempoJogo');
 
 const CONFIG = {
     termo:    { qtd: 1, tentativasMax: 6 },
@@ -60,7 +61,7 @@ function processarPalpite(req, res, chave) {
 
     if (venceu || acabou) {
         jogo.finalizado = true;
-        jogo.tempoSegundos = Math.floor((Date.now() - jogo.iniciadoEm) / 1000);
+        jogo.tempoSegundos = tempoDecorridoSegundos(jogo);
     }
 
     res.json({
@@ -93,7 +94,7 @@ function processarPalpite(req, res, chave) {
             tentativasUsadas: 0,
             tentativasMax: config.tentativasMax,
             finalizado: false,
-            iniciadoEm: Date.now()
+            ...iniciarEstadoTempo()
         };
 
         res.json(montarRespostaInicio(req.session[chaveDiario]));
@@ -116,6 +117,20 @@ function processarPalpite(req, res, chave) {
     });
 
     router.post(`/${tipo}/treino/palpite`, (req, res) => processarPalpite(req, res, chaveTreino));
+
+        router.post('/:tipo/:modo/pausar', (req, res) => {
+        const chave = `termo_${req.params.tipo}_${req.params.modo}`;
+        const jogo = req.session[chave];
+        if (jogo && !jogo.finalizado) pausar(jogo);
+        res.json({ ok: true });
+    });
+
+    router.post('/:tipo/:modo/retomar', (req, res) => {
+        const chave = `termo_${req.params.tipo}_${req.params.modo}`;
+        const jogo = req.session[chave];
+        if (jogo && !jogo.finalizado) retomar(jogo);
+        res.json({ ok: true });
+    });
 });
 
 module.exports = router;

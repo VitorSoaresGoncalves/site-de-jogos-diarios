@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/conexo.css">
     <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/notificacoes.css">
 </head>
 <body>
 
@@ -41,9 +42,12 @@
     <script>
         const API_BASE = '/api/conexo/diario';
         const PROXIMO_JOGO = { link: '/index.html', texto: 'Voltar ao início' };
+        window.EH_PAGINA_DE_JOGO = true;
+        window.NOME_JOGO_EXIBICAO = 'o Conexo Diário';
     </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="../js/conexao-jogadores.js"></script>
+    <script src="../js/notificacao-convite.js"></script>
     <script src="../js/sessao.js"></script>
     <script src="../js/modal-resultado.js"></script>
     <script src="../js/conexo-jogo.js"></script>

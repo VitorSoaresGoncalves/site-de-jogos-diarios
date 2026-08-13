@@ -38,6 +38,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="../js/conexao-jogadores.js"></script>
     <script src="../js/sessao.js"></script>
+    <script src="../js/notificacao-convite.js"></script>
+    
     <script>
         let meuId = null;
 
@@ -115,6 +117,7 @@
             await carregarUsuarioAtual();
             await carregarLista();
         })();
+        window.EH_PAGINA_DE_JOGO = true;
     </script>
 </body>
 </html>
