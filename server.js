@@ -12,7 +12,9 @@ const termoRoutes = require('./routes/termo');
 const conexoRoutes = require('./routes/conexo');
 const { registrarEventosSocket } = require('./sockets/conexaoJogadores');
 
+
 const app = express();
+app.set('trust proxy', 1);
 const servidorHttp = http.createServer(app);
 const io = new Server(servidorHttp);
 const PORT = process.env.PORT || 3000;
