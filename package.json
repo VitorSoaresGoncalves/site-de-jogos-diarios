@@ -1,8 +1,11 @@
 {
-  "name": "site-jogos",
+  "name": "passa0tempo",
   "version": "1.0.0",
-  "description": "",
+  "description": "Site de jogos diários - Termo, Conexo e mais",
   "main": "index.js",
+  "engines": {
+        "node": ">=20.0.0"
+    },
   "scripts": {
     "start": "node server.js"
   },
@@ -20,3 +23,4 @@
     "socket.io": "^4.8.3"
   }
 }
+
